@@ -1,6 +1,4 @@
 import geopandas as gpd
-import pandas as pd
-import rioxarray
 from pathlib import Path
 
 # Target result, used to define AoI

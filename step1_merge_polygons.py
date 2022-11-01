@@ -1,6 +1,5 @@
 import geopandas as gpd
 import pandas as pd
-import rioxarray
 from pathlib import Path
 
 # Data directory
@@ -46,12 +45,14 @@ if __name__ == "__main__":
     # Add query results to brp
     brp = pd.concat([brp, query_bro, query_peilgebied], axis=1)
 
-    # Writing results to geojson
-    # GeoDataFrame's ".to_file()" cannot handle list fields, so we are mannualy writing the json
-    # The geojson file can be loaded into QGIS direclty
-    # The drawback is hat geojson is very big, we can also see other possibilities
-    json_str = brp.to_json(indent=4)
-    with open('results.geojson', "w") as f:
-        f.write(json_str)
+    # Rearrange column order, make 'geometry' the last col
+    cols = brp.columns.to_list()
+    cols.remove('geometry')
+    cols.append('geometry')
+    brp = brp[cols]
+
+    # Use the pyogrio engine since we have list in the fields
+    # Lists will be forced to str. ToDo: solve this problem
+    brp.to_file("results_step1.shp", engine="pyogrio")
 
 

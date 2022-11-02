@@ -1,9 +1,13 @@
 # vector_processing
 
-### Installation
+### Installation dependencies
 
 ```sh
 conda env create -f envrionment.yml
+```
+
+```sh
+conda activate vector_processing
 ```
 
 ### Expected data structure

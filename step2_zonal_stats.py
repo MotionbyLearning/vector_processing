@@ -1,4 +1,3 @@
-from cProfile import label
 import geopandas as gpd
 import pandas as pd
 import rioxarray
@@ -9,7 +8,7 @@ import xarray as xr
 from xrspatial import zonal_stats
 
 # Data directory
-dir_dataset = Path("/mnt/c/Users/OuKu/Developments/MobyLe/vector_processing/datasets/")
+dir_dataset = Path("./datasets/")
 
 # List of tiff files
 f_glg = dir_dataset/'pdok'/'glg-mediaan.tif'

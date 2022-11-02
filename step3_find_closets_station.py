@@ -1,12 +1,11 @@
 import geopandas as gpd
 import itertools
 from pathlib import Path
-from numpy import column_stack
 from shapely.geometry import Point
 from geovoronoi import voronoi_regions_from_coords, points_to_coords
 
 # Data directory
-dir_dataset = Path("/mnt/c/Users/OuKu/Developments/MobyLe/vector_processing/datasets/")
+dir_dataset = Path("./datasets/")
 
 # Data directory
 f_knmi_stations = Path("./datasets/knmi/knmistations.csv")
@@ -38,13 +37,13 @@ if __name__ == "__main__":
     # Drop duplicate coords. ToDo: other solutions?
     knmi_stations = knmi_stations.drop_duplicates('geometry')
 
-
     # Calculate Voronoi Regions
     coords = points_to_coords(knmi_stations.geometry)
     poly_shapes, pts = voronoi_regions_from_coords(coords, aoi_with_buffer[0]) # There are duplicates in "pts" because of duplicate coords
 
     # Make a GDF with Voronoi and corresponding STN
     voronoi = gpd.GeoDataFrame(geometry=list(poly_shapes.values()))
+    voronoi = voronoi.set_crs(28992)
     pts_index = list(itertools.chain(*list(pts.values()))) # ToDo: imporve this complicated syntax
     voronoi['STN'] = knmi_stations.iloc[pts_index]['STN'].values
 
@@ -54,7 +53,7 @@ if __name__ == "__main__":
     # Search for the closest STN, append searching results to brp
     # This is done by selecting the first entry. An improvement can be applied if more precision is required 
     brp = brp.sjoin(voronoi[['STN', 'geometry']], how='left')
-    brp = brp.rename(columns={'STN': 'nearest_STN'}).drop(columns=['index_right'])
+    brp = brp.rename(columns={'STN': 'near_STN'}).drop(columns=['index_right'])
     brp.iloc[~brp.index.duplicated()] # Drop duplicated index
 
     # Rearrange column order, make 'geometry' the last col
@@ -63,6 +62,9 @@ if __name__ == "__main__":
     cols.append('geometry')
     brp = brp[cols]
 
+    # convert back to wgs84
+    brp = brp.to_crs(4326)
+    
     # Use the pyogrio engine since we have list in the fields
     # Lists will be forced to str. ToDo: solve this problem
-    brp.to_file("results_step1.shp", engine="pyogrio")
+    brp.to_file("results_step3.shp", engine="pyogrio")

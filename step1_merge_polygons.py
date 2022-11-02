@@ -3,7 +3,7 @@ import pandas as pd
 from pathlib import Path
 
 # Data directory
-dir_dataset = Path("/mnt/c/Users/OuKu/Developments/MobyLe/vector_processing/datasets/")
+dir_dataset = Path("./datasets/")
 
 
 if __name__ == "__main__":

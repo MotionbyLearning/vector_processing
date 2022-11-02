@@ -3,11 +3,11 @@ from pathlib import Path
 
 # Target result, used to define AoI
 file_target = Path(
-    "/mnt/c/Users/OuKu/Developments/MobyLe/vector_processing/exmaple_results/assendelft/assendelft_attributes_wgs48.shp"
+    "./exmaple_results/assendelft/assendelft_attributes_wgs48.shp"
 )
 
 # Data directory
-dir_dataset = Path("/mnt/c/Users/OuKu/Developments/MobyLe/vector_processing/datasets/")
+dir_dataset = Path("./datasets/")
 
 
 if __name__ == "__main__":

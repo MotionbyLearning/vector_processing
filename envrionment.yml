@@ -1,0 +1,12 @@
+name: vector_processing
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - rioxarray
+  - geopandas
+  - pyogrio
+  - xarray-spatial
+  - pip
+  - pip:
+    - geovoronoi
